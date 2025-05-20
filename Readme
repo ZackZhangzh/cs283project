@@ -1,0 +1,25 @@
+#
+
+```bash
+
+pip install numpy pybullet scipy pynput
+
+cd ~/cs283project/src/telekinesis
+
+python arm_teleoperation.py 
+
+roslaunch arm_teleop arm_teleop.launch
+
+roslaunch arm_teleop arm_teleop.launch use_real_hand:=true
+
+##
+```
+
+```bash
+catkin_make
+
+source devel/setup.bash
+
+cd src/telekinesis/
+python arm_teleoperation.py
+```

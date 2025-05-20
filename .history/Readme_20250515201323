@@ -1,0 +1,16 @@
+#
+
+## TODO
+1. hand or 
+
+
+```bash
+
+pip install numpy pybullet scipy pynput
+
+cd ~/cs283project/src/telekinesis
+
+python arm_teleoperation.py 
+
+
+```

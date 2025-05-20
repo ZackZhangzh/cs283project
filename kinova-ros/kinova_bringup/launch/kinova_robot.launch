@@ -1,0 +1,67 @@
+<launch>
+
+  <!-- 定义参数，允许通过命令行或其他launch文件传递 -->
+  <arg name="use_urdf" default="true"/> <!-- 是否使用URDF模型描述机器人 -->
+  <arg name="kinova_robotType" default="j2n6s300" /> <!-- 机器人型号 -->
+  <arg name="kinova_robotName" default="$(arg kinova_robotType)"/> <!-- 机器人名称，默认与型号相同 -->
+  <arg name="kinova_robotSerial" default="not_set" /> <!-- 机器人序列号 -->
+  <arg name="use_jaco_v1_fingers" default="false" /> <!-- 是否使用Jaco v1手指 -->
+  <arg name="feedback_publish_rate" default="0.1" /> <!-- 反馈信息发布频率 -->
+  <arg name="respawn_driver" default="False" /> <!-- 驱动节点异常退出时是否自动重启 -->
+  <arg name="rvizconfig" default="$(find kinova_description)/rviz/display.rviz" /> <!-- RViz配置文件路径 -->
+
+  <!-- 多机器人配置（默认注释掉） -->
+  <!-- <rosparam file="$(find kinova_bringup)/launch/config/multiple_robots.yaml" command="load" /> -->
+
+  <!-- 启动kinova_driver节点，负责与机械臂硬件通信 -->
+  <node name="$(arg kinova_robotName)_driver"
+        pkg="kinova_driver"
+        type="kinova_arm_driver"
+        output="screen"
+        cwd="node"
+        args="$(arg kinova_robotType)"
+        respawn="$(arg respawn_driver)">
+    <!-- 加载机器人参数 -->
+    <rosparam file="$(find kinova_bringup)/launch/config/robot_parameters.yaml" command="load" />
+    <param name="serial_number" value="$(arg kinova_robotSerial)" />   
+    <param name="robot_name" value="$(arg kinova_robotName)" />   
+    <param name="robot_type" value="$(arg kinova_robotType)" />   
+    <!-- <param name="use_jaco_v1_fingers" value="$(arg use_jaco_v1_fingers)" />    -->
+    <param name="status_interval_seconds" value="$(arg feedback_publish_rate)" />
+    <!-- 话题重映射（默认注释掉） -->
+    <!-- <remap from="/$(arg kinova_robotName)_driver/out/joint_state" to="/joint_states"/> -->
+    <!-- <remap from="/joint_states" to="/$(arg kinova_robotName)_driver/out/joint_state"/> -->
+  </node>
+    
+  <!-- 如果不使用URDF，则启动tf_updater节点，负责发布TF变换 -->
+  <group unless="$(arg use_urdf)">
+    <node name="$(arg kinova_robotName)_tf_updater"
+          pkg="kinova_driver"
+          type="kinova_tf_updater"
+          output="screen"
+          cwd="node"
+          args="$(arg kinova_robotType)">
+      <remap from="/$(arg kinova_robotName)_tf_updater/in/joint_angles" to="/$(arg kinova_robotName)_driver/out/joint_angles"/>
+      <param name="base_frame" value="root"/>
+    </node>
+  </group>
+
+  <!-- 如果使用URDF，则加载机器人描述，并启动状态发布和可视化节点 -->
+  <group if="$(arg use_urdf)">
+    <!-- 加载URDF描述到robot_description参数 -->
+    <param name="robot_description" command="$(find xacro)/xacro '$(find kinova_description)/urdf/$(arg kinova_robotType)_standalone.xacro'" />
+    <!-- 启动robot_state_publisher节点，发布TF和joint_states -->
+    <node name="$(arg kinova_robotName)_state_publisher"
+           pkg="robot_state_publisher"
+           type="robot_state_publisher">
+      <remap from="/joint_states" to="/$(arg kinova_robotName)_driver/out/joint_state"/>
+    </node>
+    <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" /> -->
+    <!-- 启动RViz进行可视化 -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true"/>
+  </group>
+
+  <!-- 其他功能节点可通过include方式引入（默认注释掉） -->
+  <!-- <include file="src/leaphandProject/leaphand/example.launch" /> -->
+
+</launch>
