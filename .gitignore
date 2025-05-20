@@ -1,0 +1,16 @@
+
+# vscode
+.history/
+.vscode/
+.catkin_workspace
+
+
+#Stuff built by rosmake
+/build
+/bin
+/lib/*.so
+#Stuff added by make eclipse-project
+*.project
+*.pydevproject
+*.cproject
+

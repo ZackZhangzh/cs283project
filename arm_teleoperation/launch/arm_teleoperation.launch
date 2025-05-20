@@ -1,0 +1,11 @@
+<launch>
+    <!-- Arguments -->
+    <arg name="use_simulator" default="true" doc="Use PyBullet simulator for IK"/>
+    <arg name="urdf_path" default="$(find kinova_description)/urdf/robot.urdf" doc="Path to the robot URDF file"/>
+
+    <!-- Launch the node -->
+    <node name="arm_teleoperation_node" pkg="arm_teleoperation" type="arm_teleoperation_node.py" output="screen">
+        <param name="use_simulator" value="$(arg use_simulator)"/>
+        <param name="urdf_path" value="$(arg urdf_path)"/>
+    </node>
+</launch>
