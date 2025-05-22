@@ -1,4 +1,6 @@
 
+
+
 # vscode
 .history/
 .vscode/
@@ -6,6 +8,9 @@
 
 
 #Stuff built by rosmake
+# ROS
+build/
+devel/
 /build
 /bin
 /lib/*.so
