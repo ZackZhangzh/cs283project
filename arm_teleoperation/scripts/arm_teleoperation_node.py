@@ -12,6 +12,10 @@ from std_msgs.msg import Float64MultiArray
 from pynput.keyboard import Key, Listener
 import sys
 from scipy.spatial.transform import Rotation as R
+import actionlib
+from kinova_msgs.msg import ArmJointAnglesAction, ArmJointAnglesGoal
+from kinova_msgs.msg import ArmPoseAction, ArmPoseGoal
+from kinova_msgs.msg import SetFingersPositionAction, SetFingersPositionGoal
 
 try:
     from oculus_reader.scripts import *
@@ -225,27 +229,78 @@ class KinovaPybulletIK:
 
         # Get ROS parameters
         self.use_simulator = rospy.get_param("~use_simulator", True)
+        self.control_real_robot = rospy.get_param("~control_real_robot", False)
+        self.robot_type = rospy.get_param("~robot_type", "j2n6s300")
         self.urdf_path = rospy.get_param(
             "~urdf_path", "../kinova_description/urdf/robot.urdf"
         )
+        self.update_rate = rospy.get_param("~update_rate", 30)  # Hz
+        self.position_limit_margin = rospy.get_param(
+            "~position_limit_margin", 0.05
+        )  # meters
 
-        # Publishers for joint commands
+        # Append robot_type prefix if needed
+        robot_prefix = self.robot_type + "_"
+
+        # Publishers for joint commands (for simulation and monitoring)
         self.joint_cmd_pub = rospy.Publisher(
-            "/j2n6s300/joint_angles/cmd", Float64MultiArray, queue_size=1
+            "/" + robot_prefix + "driver/joint_angles/cmd",
+            Float64MultiArray,
+            queue_size=1,
         )
         self.pose_cmd_pub = rospy.Publisher(
-            "/j2n6s300/tool_pose/cmd", PoseStamped, queue_size=1
+            "/" + robot_prefix + "driver/tool_pose/cmd", PoseStamped, queue_size=1
         )
+
+        # Action clients for real robot control
+        if self.control_real_robot:
+            rospy.loginfo("Setting up action clients for real robot control")
+            self.joint_action_client = actionlib.SimpleActionClient(
+                "/" + robot_prefix + "driver/joints_action/joint_angles",
+                ArmJointAnglesAction,
+            )
+            self.pose_action_client = actionlib.SimpleActionClient(
+                "/" + robot_prefix + "driver/pose_action/tool_pose", ArmPoseAction
+            )
+            self.fingers_action_client = actionlib.SimpleActionClient(
+                "/" + robot_prefix + "driver/fingers_action/finger_positions",
+                SetFingersPositionAction,
+            )
+
+            # Wait for action servers to become available
+            try:
+                timeout = rospy.Duration(5.0)
+                rospy.loginfo("Waiting for joint_angles action server...")
+                self.joint_action_client.wait_for_server(timeout)
+                rospy.loginfo("Waiting for tool_pose action server...")
+                self.pose_action_client.wait_for_server(timeout)
+                rospy.loginfo("Waiting for finger_positions action server...")
+                self.fingers_action_client.wait_for_server(timeout)
+                rospy.loginfo("All action servers connected!")
+            except:
+                rospy.logwarn(
+                    "Failed to connect to one or more action servers. Will continue with simulation only."
+                )
+                self.control_real_robot = False
+
+        # Subscribe to joint states if controlling real robot to monitor position
+        if self.control_real_robot:
+            self.joint_states_sub = rospy.Subscriber(
+                "/" + robot_prefix + "driver/out/joint_state",
+                JointState,
+                self.joint_state_callback,
+            )
+            self.current_joint_positions = None
+            self.joint_position_limits = {
+                # Define joint limits here based on Kinova documentation
+                "lower": [-10.0, -10.0, -10.0, -10.0, -10.0, -10.0],
+                "upper": [10.0, 10.0, 10.0, 10.0, 10.0, 10.0],
+            }
 
         # Initialize simulator if enabled
         if self.use_simulator:
             # start pybullet
-            # clid = p.connect(p.SHARED_MEMORY)
-            # clid = p.connect(p.DIRECT)
             p.connect(p.GUI)
-            # load right leap hand
-            path_src = os.path.abspath(__file__)
-            path_src = os.path.dirname(path_src)
             self.glove_to_leap_mapping_scale = 1.6
             self.kinovaEndEffectorIndex = 9
 
@@ -263,11 +318,8 @@ class KinovaPybulletIK:
 
             rospy.loginfo(f"Loading URDF from: {self.urdf_path}")
 
-            ##You may have to set this path for your setup on ROS2
             self.kinovaId = p.loadURDF(
                 self.urdf_path,
-                # [-0.05, -0.03, -0.125],
-                # [0.0,0.038,0.098],
                 [0.0, 0.0, 0.0],
                 p.getQuaternionFromEuler([0, 0, 0]),
                 useFixedBase=True,
@@ -285,8 +337,6 @@ class KinovaPybulletIK:
             for i in range(self.numJoints):
                 info = p.getJointInfo(self.kinovaId, i)
                 rospy.loginfo("Joint {}: {}".format(i, info[1].decode("utf-8")))
-
-                # print(info)
 
         self.operator2mano = OPERATOR2MANO_RIGHT
 
@@ -310,15 +360,47 @@ class KinovaPybulletIK:
         )
         self.keyboard_listener.start()
 
+        # For safety, track when control was last enabled
+        self.last_control_time = None
+        self.control_timeout = rospy.Duration(
+            0.5
+        )  # timeout if no updates for 0.5 seconds
+
+    def joint_state_callback(self, msg):
+        # Store current joint positions for safety checks
+        self.current_joint_positions = list(msg.position)[:6]  # Only use the arm joints
+
     def on_press(self, key):
         global space_pressed
         if key == Key.space:
             space_pressed = True
+            self.last_control_time = rospy.Time.now()
 
     def on_release(self, key):
         global space_pressed
         if key == Key.space:
             space_pressed = False
+            # Stop the robot when space is released if using real robot
+            if self.control_real_robot:
+                rospy.loginfo("Control released, stopping robot")
+                self.stop_robot()
+
+    def stop_robot(self):
+        """Send a stop command to the robot"""
+        if self.control_real_robot:
+            try:
+                # Use current positions to avoid jerky stops
+                if self.current_joint_positions:
+                    goal = ArmJointAnglesGoal()
+                    goal.angles.joint1 = self.current_joint_positions[0]
+                    goal.angles.joint2 = self.current_joint_positions[1]
+                    goal.angles.joint3 = self.current_joint_positions[2]
+                    goal.angles.joint4 = self.current_joint_positions[3]
+                    goal.angles.joint5 = self.current_joint_positions[4]
+                    goal.angles.joint6 = self.current_joint_positions[5]
+                    self.joint_action_client.send_goal(goal)
+            except Exception as e:
+                rospy.logerr(f"Failed to stop robot: {e}")
 
     def update_target_vis(self, hand_pos):
         if self.use_simulator:
@@ -354,6 +436,47 @@ class KinovaPybulletIK:
             )
         p.changeVisualShape(self.ballMbt[0], -1, rgbaColor=[1, 0, 0, 1])
 
+    def check_joint_safety(self, jointPoses):
+        """Check if joint positions are within safe limits"""
+        if self.current_joint_positions is None:
+            return False
+
+        # Check if any joint is out of limits
+        for i in range(len(jointPoses)):
+            if (
+                jointPoses[i] < self.joint_position_limits["lower"][i]
+                or jointPoses[i] > self.joint_position_limits["upper"][i]
+            ):
+                rospy.logwarn(f"Joint {i} out of safety limits: {jointPoses[i]}")
+                return False
+
+        # Check for large changes
+        joint_change = np.abs(
+            np.array(jointPoses) - np.array(self.current_joint_positions)
+        )
+        if np.max(joint_change) > 0.5:  # 0.5 radians is about 30 degrees
+            rospy.logwarn(f"Large joint change detected: {np.max(joint_change)} rad")
+            return False
+
+        return True
+
+    def check_pose_safety(self, pose_pos):
+        """Check if end effector position is within safe workspace"""
+        # Define a safe workspace cube
+        workspace_min = np.array([0.1, -0.5, 0.1])  # adjust based on your robot
+        workspace_max = np.array([0.7, 0.5, 0.7])
+
+        pos_array = np.array([pose_pos[0], pose_pos[1], pose_pos[2]])
+
+        # Check if position is within safety margin of workspace limits
+        if np.any(pos_array < workspace_min + self.position_limit_margin) or np.any(
+            pos_array > workspace_max - self.position_limit_margin
+        ):
+            rospy.logwarn(f"Position {pos_array} outside safe workspace")
+            return False
+
+        return True
+
     def compute_IK(self, arm_pos, arm_rot):
         if self.use_simulator:
             p.stepSimulation()
@@ -378,7 +501,6 @@ class KinovaPybulletIK:
                 jointPoses = qpos_now
             else:
                 jointPoses = np.array(jointPoses[:6])
-                # qpos_arm_err = np.linalg.norm(jointPoses - qpos_now)
                 sum = 0.0
                 for i in range(6):
                     sum += (jointPoses[i] - qpos_now[i]) * (jointPoses[i] - qpos_now[i])
@@ -413,7 +535,7 @@ class KinovaPybulletIK:
             # Also publish end effector pose
             pose_msg = PoseStamped()
             pose_msg.header.stamp = rospy.Time.now()
-            pose_msg.header.frame_id = "j2n6s300_link_base"
+            pose_msg.header.frame_id = self.robot_type + "_link_base"
             pose_msg.pose.position.x = arm_pos[0]
             pose_msg.pose.position.y = arm_pos[1]
             pose_msg.pose.position.z = arm_pos[2]
@@ -423,14 +545,56 @@ class KinovaPybulletIK:
             pose_msg.pose.orientation.z = arm_rot[3]
             self.pose_cmd_pub.publish(pose_msg)
 
+            # Send commands to the real robot if enabled
+            if self.control_real_robot and space_pressed:
+                # Only send commands if within safe limits and timeout hasn't been reached
+                current_time = rospy.Time.now()
+                if self.last_control_time and (
+                    current_time - self.last_control_time < self.control_timeout
+                ):
+                    # Perform safety checks
+                    pose_safe = self.check_pose_safety(arm_pos)
+                    joint_safe = self.check_joint_safety(jointPoses)
+
+                    if pose_safe and joint_safe:
+                        # Update the time of last valid control
+                        self.last_control_time = current_time
+
+                        # Send joint angles command
+                        joint_goal = ArmJointAnglesGoal()
+                        joint_goal.angles.joint1 = jointPoses[0]
+                        joint_goal.angles.joint2 = jointPoses[1]
+                        joint_goal.angles.joint3 = jointPoses[2]
+                        joint_goal.angles.joint4 = jointPoses[3]
+                        joint_goal.angles.joint5 = jointPoses[4]
+                        joint_goal.angles.joint6 = jointPoses[5]
+                        self.joint_action_client.send_goal(joint_goal)
+
+                        # Also send Cartesian pose command for better control
+                        pose_goal = ArmPoseGoal()
+                        pose_goal.pose = pose_msg
+                        self.pose_action_client.send_goal(pose_goal)
+                    else:
+                        rospy.logwarn(
+                            "Command not sent to real robot due to safety constraints"
+                        )
+                else:
+                    if self.last_control_time:
+                        rospy.logwarn(
+                            "Control timeout reached, not sending commands to real robot"
+                        )
+                    self.stop_robot()
+
     def run(self):
-        rate = rospy.Rate(30)  # 30Hz
+        rate = rospy.Rate(self.update_rate)  # Hz
         VRP0 = None
         VRR0 = None
         MJP0 = None
         MJR0 = None
 
         rospy.loginfo("Arm teleoperation node running. Press SPACE to control the arm.")
+        if self.control_real_robot:
+            rospy.loginfo("REAL ROBOT CONTROL ENABLED - BE CAREFUL!")
 
         while not rospy.is_shutdown():
             if OCULUS_AVAILABLE and self.oculus_reader:
@@ -442,11 +606,7 @@ class KinovaPybulletIK:
                 # kinova
                 if transformations and "r" in transformations:
                     right_controller_pose = transformations["r"]
-                    VRpos, VRquat = vrfront2mj(
-                        right_controller_pose
-                    )  # front x, left y, up z
-                    # VRpos, VRquat = vrbehind2mj(right_controller_pose) # front -x, left -y, up z
-                    # VRpos, VRquat = vr2mj(right_controller_pose)
+                    VRpos, VRquat = vrfront2mj(right_controller_pose)
 
                     if space_pressed:
                         # dVRP/R = VRP/Rt - VRP/R0
@@ -466,15 +626,6 @@ class KinovaPybulletIK:
                             curr_pos = link_state[4]
                             curr_quat = link_state[5]
 
-                            for i in range(2, 8):
-                                rospy.logdebug(
-                                    "Joint %d angle: %f",
-                                    i,
-                                    p.getJointState(self.kinovaId, i)[0],
-                                )
-
-                            rospy.logdebug("target_pos: %s", curr_pos)
-                            rospy.logdebug("target_quat: %s", curr_quat)
                         else:
                             # In non-simulator mode, use a fixed starting position
                             curr_pos = np.array([0.4, 0.0, 0.4])  # Default position
@@ -489,7 +640,7 @@ class KinovaPybulletIK:
                         VRP0 = VRpos
                         VRR0 = VRquat
 
-                    # udpate desired pos
+                    # update desired pos
                     target_pos = curr_pos
                     target_quat = curr_quat
 
