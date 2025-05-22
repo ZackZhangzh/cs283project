@@ -208,7 +208,7 @@ class KinovaPybulletIK:
         self.kinovaEndEffectorIndex = 9
 
         # path_src = os.path.join(path_src, "leap_hand_mesh_right/robot_pybullet.urdf")
-        path_src = "../kinova_description/urdf/robot.urdf"
+        path_src = "../kinova-ros/kinova_description/urdf/robot.urdf"
         ##You may have to set this path for your setup on ROS2
         self.kinovaId = p.loadURDF(
             path_src,
@@ -331,11 +331,11 @@ class KinovaPybulletIK:
             transformations, buttons = (
                 self.oculus_reader.get_transformations_and_buttons()
             )
-   
+
             # kinova
             if transformations and "r" in transformations:
                 print("transformations", transformations)
-                            
+
                 right_controller_pose = transformations["r"]
                 VRpos, VRquat = vrfront2mj(
                     right_controller_pose
