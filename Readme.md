@@ -21,25 +21,34 @@ cd ~/cs283project
 pip install -r requirements.txt
 ```
 
+```bash
+# driver 
+sudo cp src/kinova-ros/kinova_driver/udev/10-kinova-arm.rules /etc/udev/rules.d/
+sudo udevadm control --reload-rules && sudo udevadm trigger
+
+lsusb | grep 22cd
+
+sudo dmesg | grep -i kinova
+```
+
 ## 🦾 Run It
 
 ```bash
 # ROS1 noetic
-catkin_make
-source devel/setup.bash
+catkin_make && source devel/setup.bash
+
+
 ```
 
 ```bash
 
 cd ~/cs283project/src/telekinesis
-python arm_teleoperation.py 
+python arm_teleoperation_key.py 
 
 ```
 
 ```bash
 roslaunch arm_teleoperation arm_teleoperation.launch
-roslaunch arm_teleoperation arm_teleoperation.launch control_real_robot:=true
-
 
 roslaunch kinova_bringup kinova_robot.launch 
 ```
