@@ -2,44 +2,36 @@
     该launch文件用于启动arm_teleoperation节点，实现机械臂的远程操作。
 
     参数说明:
-    - use_simulator: 是否使用PyBullet仿真器进行逆运动学计算。默认为true，表示启用仿真器。
     - urdf_path: 机械臂URDF文件的路径。默认路径为kinova_description包下的robot.urdf文件。
+    - robot_type: 机器人类型，默认为j2n6s300。
+    - update_rate: 控制循环更新频率，默认为30Hz。
+    - position_limit_margin: 位置限制的安全边距，单位为米，默认为0.05米。
 
     启动流程:
     1. 解析并设置上述参数。
     2. 启动名为arm_teleoperation_node的节点，该节点属于arm_teleoperation包，执行arm_teleoperation_node.py脚本。
-    3. 节点启动时，将use_simulator和urdf_path参数传递给节点，便于节点根据参数选择仿真或真实硬件，并加载对应的URDF模型。
+    3. 节点启动时，将参数传递给节点，用于加载对应的URDF模型和配置模拟环境。
     4. 节点的输出将显示在终端（screen）。
 
     用法:
     可通过命令行传递参数覆盖默认值，例如:
-    roslaunch arm_teleoperation arm_teleoperation.launch use_simulator:=false urdf_path:=/path/to/your/robot.urdf
+    roslaunch arm_teleoperation arm_teleoperation.launch urdf_path:=/path/to/your/robot.urdf
 
     注意事项:
     - 确保kinova_description包已正确安装，并且URDF文件路径有效。
-    - 若不使用仿真器，请确保硬件连接正常。
+    - 此版本仅在模拟环境中运行，无法控制真实机器人。
 -->
 <launch>
     <!-- Arguments -->
-    <arg name="use_simulator" default="true" doc="Use PyBullet simulator for IK"/>
-    <arg name="control_real_robot" default="false" doc="Send commands to the real robot"/>
     <arg name="robot_type" default="j2n6s300" doc="Robot type (e.g. j2n6s300)"/>
     <arg name="urdf_path" default="$(find kinova_description)/urdf/robot.urdf" doc="Path to the robot URDF file"/>
     <arg name="update_rate" default="30" doc="Control loop update rate in Hz"/>
     <arg name="position_limit_margin" default="0.05" doc="Safety margin for position limits in meters"/>
 
     <!-- 
-        rosrun arm_teleoperation arm_teleoperation_node.py 
-        _use_simulator:=true 
-        _control_real_robot:=false 
-        _robot_type:=j2n6s300 
-        _urdf_path:=$(find kinova_description)/urdf/robot.urdf 
-        _update_rate:=30 
-        _position_limit_margin:=0.05
+        rosrun arm_teleoperation arm_teleoperation_node.py _robot_type:=j2n6s300 _urdf_path:=$(find kinova_description)/urdf/robot.urdf _update_rate:=30 _position_limit_margin:=0.05
     -->
     <node name="arm_teleoperation_node" pkg="arm_teleoperation" type="arm_teleoperation_node.py" output="screen">
-        <param name="use_simulator" value="$(arg use_simulator)"/>
-        <param name="control_real_robot" value="$(arg control_real_robot)"/>
         <param name="robot_type" value="$(arg robot_type)"/>
         <param name="urdf_path" value="$(arg urdf_path)"/>
         <param name="update_rate" value="$(arg update_rate)"/>
