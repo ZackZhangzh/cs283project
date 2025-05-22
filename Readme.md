@@ -24,6 +24,7 @@ pip install -r requirements.txt
 ## 🦾 Run It
 
 ```bash
+# ROS1 noetic
 catkin_make
 source devel/setup.bash
 ```

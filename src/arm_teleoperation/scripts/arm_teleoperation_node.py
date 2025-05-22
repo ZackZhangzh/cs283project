@@ -43,7 +43,15 @@ Note how the fingertip positions are matching, but the joint angles between the 
 Inspired by Dexcap https://dex-cap.github.io/ by Wang et. al. and Robotic Telekinesis by Shaw et. al.
 """
 
-space_pressed = False
+control_enabled = True  # Default to enabled control state
+space_pressed = True  # Default to enabled (changed from hold-to-enable to toggle mode)
+keyboard_control = {
+    "pos_delta": 0.01,  # Position change increment in meters
+    "rot_delta": 0.05,  # Rotation change increment in radians
+    "current_pos": np.array([0.4, 0.0, 0.4]),  # Default position [x, y, z]
+    "current_rot": np.array([1.0, 0.0, 0.0, 0.0]),  # Default orientation [w, x, y, z]
+    "keys_pressed": set(),  # Track which keys are currently pressed
+}
 
 OPERATOR2MANO_RIGHT = np.array(
     [
@@ -260,7 +268,8 @@ class KinovaPybulletIK:
                 ArmJointAnglesAction,
             )
             self.pose_action_client = actionlib.SimpleActionClient(
-                "/" + robot_prefix + "driver/pose_action/tool_pose", ArmPoseAction
+                "/" + robot_prefix + "driver/pose_action/tool_pose",
+                ArmPoseAction,
             )
             self.fingers_action_client = actionlib.SimpleActionClient(
                 "/" + robot_prefix + "driver/fingers_action/finger_positions",
@@ -371,19 +380,53 @@ class KinovaPybulletIK:
         self.current_joint_positions = list(msg.position)[:6]  # Only use the arm joints
 
     def on_press(self, key):
-        global space_pressed
+        global space_pressed, keyboard_control
+
+        # Space key toggles control mode
         if key == Key.space:
-            space_pressed = True
-            self.last_control_time = rospy.Time.now()
+            space_pressed = not space_pressed
+            if space_pressed:
+                rospy.loginfo("Control ENABLED")
+                self.last_control_time = rospy.Time.now()
+
+                # Initialize keyboard control with current robot position when enabling
+                if self.use_simulator:
+                    link_state = p.getLinkState(
+                        self.kinovaId, self.kinovaEndEffectorIndex
+                    )
+                    keyboard_control["current_pos"] = np.array(link_state[4])
+                    keyboard_control["current_rot"] = np.array(link_state[5])
+            else:
+                rospy.loginfo("Control DISABLED")
+                if self.control_real_robot:
+                    self.stop_robot()
+
+        # Track keyboard controls for manual operation
+        if key == Key.shift:
+            keyboard_control["keys_pressed"].add("shift")
+
+        try:
+            key_char = key.char.lower()
+            keyboard_control["keys_pressed"].add(key_char)
+        except AttributeError:
+            # Special keys (like arrows) don't have a char
+            pass
 
     def on_release(self, key):
-        global space_pressed
-        if key == Key.space:
-            space_pressed = False
-            # Stop the robot when space is released if using real robot
-            if self.control_real_robot:
-                rospy.loginfo("Control released, stopping robot")
-                self.stop_robot()
+        global keyboard_control
+
+        # Track keyboard controls for manual operation
+        if key == Key.shift:
+            if "shift" in keyboard_control["keys_pressed"]:
+                keyboard_control["keys_pressed"].remove("shift")
+
+        try:
+            key_char = key.char.lower()
+            if key_char in keyboard_control["keys_pressed"]:
+                keyboard_control["keys_pressed"].remove(key_char)
+        except AttributeError:
+            # Special keys don't have a char
+            pass
 
     def stop_robot(self):
         """Send a stop command to the robot"""
@@ -479,6 +522,19 @@ class KinovaPybulletIK:
 
     def compute_IK(self, arm_pos, arm_rot):
         if self.use_simulator:
+            # Enforce position limits for keyboard control
+            workspace_min = np.array([0.1, -0.5, 0.1])
+            workspace_max = np.array([0.7, 0.5, 0.7])
+
+            # Clamp position to safe workspace with margin
+            arm_pos_array = np.array(arm_pos)
+            arm_pos_array = np.clip(
+                arm_pos_array,
+                workspace_min + self.position_limit_margin,
+                workspace_max - self.position_limit_margin,
+            )
+            arm_pos = arm_pos_array
+
             p.stepSimulation()
 
             jointPoses = p.calculateInverseKinematics(
@@ -585,6 +641,91 @@ class KinovaPybulletIK:
                         )
                     self.stop_robot()
 
+    def process_keyboard_control(self):
+        """Process keyboard inputs to control the arm when Oculus is not available"""
+        global keyboard_control
+
+        # Position control keys
+        # WASD for X/Y plane movement, R/F for Z axis
+        # QEIJKL for orientation control
+
+        # Speed adjustment based on shift key
+        fast_mode = False
+        if "shift" in keyboard_control["keys_pressed"]:
+            fast_mode = True
+
+        pos_delta = keyboard_control["pos_delta"] * (3.0 if fast_mode else 1.0)
+        rot_delta = keyboard_control["rot_delta"] * (3.0 if fast_mode else 1.0)
+        keys = keyboard_control["keys_pressed"]
+
+        # Position control (X, Y, Z)
+        if "w" in keys:  # Forward (+X)
+            keyboard_control["current_pos"][0] += pos_delta
+            rospy.logdebug(
+                f"Moving forward, position: {keyboard_control['current_pos']}"
+            )
+        if "s" in keys:  # Backward (-X)
+            keyboard_control["current_pos"][0] -= pos_delta
+            rospy.logdebug(
+                f"Moving backward, position: {keyboard_control['current_pos']}"
+            )
+        if "d" in keys:  # Right (+Y)
+            keyboard_control["current_pos"][1] += pos_delta
+            rospy.logdebug(f"Moving right, position: {keyboard_control['current_pos']}")
+        if "a" in keys:  # Left (-Y)
+            keyboard_control["current_pos"][1] -= pos_delta
+            rospy.logdebug(f"Moving left, position: {keyboard_control['current_pos']}")
+        if "r" in keys:  # Up (+Z)
+            keyboard_control["current_pos"][2] += pos_delta
+            rospy.logdebug(f"Moving up, position: {keyboard_control['current_pos']}")
+        if "f" in keys:  # Down (-Z)
+            keyboard_control["current_pos"][2] -= pos_delta
+            rospy.logdebug(f"Moving down, position: {keyboard_control['current_pos']}")
+
+        # Rotation control using quaternions
+        # Create rotation matrices for small increments around each axis
+        if any(k in keys for k in ["q", "e", "i", "k", "j", "l"]):
+            # Get current rotation as quaternion
+            current_quat = keyboard_control["current_rot"]
+
+            # Convert to rotation matrix
+            r = R.from_quat(
+                [current_quat[1], current_quat[2], current_quat[3], current_quat[0]]
+            )
+            rotation_matrix = r.as_matrix()
+
+            # Apply incremental rotations based on keypresses
+            if "q" in keys:  # Roll left
+                delta_r = R.from_euler("x", -rot_delta)
+                rotation_matrix = delta_r.as_matrix() @ rotation_matrix
+            if "e" in keys:  # Roll right
+                delta_r = R.from_euler("x", rot_delta)
+                rotation_matrix = delta_r.as_matrix() @ rotation_matrix
+            if "i" in keys:  # Pitch up
+                delta_r = R.from_euler("y", rot_delta)
+                rotation_matrix = delta_r.as_matrix() @ rotation_matrix
+            if "k" in keys:  # Pitch down
+                delta_r = R.from_euler("y", -rot_delta)
+                rotation_matrix = delta_r.as_matrix() @ rotation_matrix
+            if "j" in keys:  # Yaw left
+                delta_r = R.from_euler("z", -rot_delta)
+                rotation_matrix = delta_r.as_matrix() @ rotation_matrix
+            if "l" in keys:  # Yaw right
+                delta_r = R.from_euler("z", rot_delta)
+                rotation_matrix = delta_r.as_matrix() @ rotation_matrix
+
+            # Convert back to quaternion
+            r = R.from_matrix(rotation_matrix)
+            quat = r.as_quat()  # Returns x, y, z, w
+
+            # Update current rotation (w, x, y, z format)
+            keyboard_control["current_rot"] = np.array(
+                [quat[3], quat[0], quat[1], quat[2]]
+            )
+
+        # Return the current position and orientation
+        return keyboard_control["current_pos"], keyboard_control["current_rot"]
+
     def run(self):
         rate = rospy.Rate(self.update_rate)  # Hz
         VRP0 = None
@@ -592,11 +733,37 @@ class KinovaPybulletIK:
         MJP0 = None
         MJR0 = None
 
+        # Initialize keyboard control with current robot position
+        if self.use_simulator:
+            link_state = p.getLinkState(self.kinovaId, self.kinovaEndEffectorIndex)
+            keyboard_control["current_pos"] = np.array(link_state[4])
+            keyboard_control["current_rot"] = np.array(link_state[5])
+
         rospy.loginfo("Arm teleoperation node running. Press SPACE to control the arm.")
         if self.control_real_robot:
             rospy.loginfo("REAL ROBOT CONTROL ENABLED - BE CAREFUL!")
 
+        # For visual feedback on control state
+        control_text_id = None
+
         while not rospy.is_shutdown():
+            # Visual feedback for control state
+            if self.use_simulator:
+                if control_text_id is not None:
+                    p.removeUserDebugItem(control_text_id)
+
+                control_text = (
+                    "CONTROL ENABLED" if space_pressed else "CONTROL DISABLED"
+                )
+                # Fix color format: Use 3-element RGB array instead of 4-element RGBA
+                text_color = [0, 1, 0] if space_pressed else [1, 0, 0]
+                control_text_id = p.addUserDebugText(
+                    control_text,
+                    [0, 0, 0.8],  # Position above the robot
+                    textColorRGB=text_color,
+                    textSize=1.5,
+                )
+
             if OCULUS_AVAILABLE and self.oculus_reader:
                 joint_pos = self.oculus_reader.get_joint_transformations()[1]
                 transformations, buttons = (
@@ -646,6 +813,20 @@ class KinovaPybulletIK:
 
                     self.compute_IK(target_pos, target_quat)
                     self.update_target_vis(target_pos)
+            else:
+                # Process keyboard control if Oculus is not available
+                if space_pressed:
+                    target_pos, target_quat = self.process_keyboard_control()
+                    self.compute_IK(target_pos, target_quat)
+                    self.update_target_vis(target_pos)
+                else:
+                    # When control is disabled, update keyboard control to current position
+                    if self.use_simulator:
+                        link_state = p.getLinkState(
+                            self.kinovaId, self.kinovaEndEffectorIndex
+                        )
+                        keyboard_control["current_pos"] = np.array(link_state[4])
+                        keyboard_control["current_rot"] = np.array(link_state[5])
 
             rate.sleep()
 

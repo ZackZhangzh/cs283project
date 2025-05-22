@@ -1,21 +1,22 @@
-
-
-
-# vscode
-.history/
+# VSCode settings and history
 .vscode/
+.history/
+prompt
+# Catkin workspace marker
 .catkin_workspace
 
-
-#Stuff built by rosmake
-# ROS
+# ROS build artifacts
 build/
 devel/
-/build
-/bin
-/lib/*.so
-#Stuff added by make eclipse-project
+bin/
+lib/*.so
+
+# IDE/project files
 *.project
 *.pydevproject
 *.cproject
 
+
+# Python cache files
+__pycache__/
+__init__.py

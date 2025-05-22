@@ -28,7 +28,15 @@
     <arg name="update_rate" default="30" doc="Control loop update rate in Hz"/>
     <arg name="position_limit_margin" default="0.05" doc="Safety margin for position limits in meters"/>
 
-    <!-- Launch the node -->
+    <!-- 
+        rosrun arm_teleoperation arm_teleoperation_node.py 
+        _use_simulator:=true 
+        _control_real_robot:=false 
+        _robot_type:=j2n6s300 
+        _urdf_path:=$(find kinova_description)/urdf/robot.urdf 
+        _update_rate:=30 
+        _position_limit_margin:=0.05
+    -->
     <node name="arm_teleoperation_node" pkg="arm_teleoperation" type="arm_teleoperation_node.py" output="screen">
         <param name="use_simulator" value="$(arg use_simulator)"/>
         <param name="control_real_robot" value="$(arg control_real_robot)"/>

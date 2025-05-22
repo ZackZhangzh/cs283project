@@ -43,8 +43,23 @@ roslaunch arm_teleoperation arm_teleoperation.launch control_real_robot:=true
 
 ### Controls
 
-- **Space bar**: Press and hold to engage arm teleoperation
+- **Space bar**: Press to toggle arm teleoperation on/off (default is ON)
 - **Oculus controller**: Move the right controller to control the arm's end effector position
+
+#### Keyboard Controls (when Oculus is not available)
+
+Position control:
+
+- **W/S**: Move forward/backward (+/- X)
+- **A/D**: Move left/right (+/- Y)
+- **R/F**: Move up/down (+/- Z)
+- **Shift**: Hold for faster movement speed
+
+Orientation control:
+
+- **Q/E**: Roll left/right
+- **I/K**: Pitch up/down
+- **J/L**: Yaw left/right
 
 ## Safety Features
 
@@ -54,7 +69,7 @@ The node includes several safety features when controlling the real robot:
 2. **Workspace limits**: The end effector position is checked against predefined workspace boundaries
 3. **Joint limits**: The joint positions are checked against the robot's joint limits
 4. **Large movement detection**: Commands that would cause large joint movements are rejected
-5. **Emergency stop**: Releasing the Space key immediately stops the robot
+5. **Emergency stop**: Press the Space key to toggle control off, which immediately stops the robot
 
 ## Notes
 
