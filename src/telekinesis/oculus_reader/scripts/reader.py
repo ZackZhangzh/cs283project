@@ -40,7 +40,7 @@ class OculusReader:
             self.fps_counter = FPSCounter()
 
         self.device = self.get_device()
-        self.install(verbose=False, reinstall=True)
+        self.install(verbose=False, reinstall=False)
         if run:
             self.run()
 

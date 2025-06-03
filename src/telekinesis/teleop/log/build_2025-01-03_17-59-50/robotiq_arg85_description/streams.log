@@ -1,0 +1,41 @@
+[0.019s] Invoking command in '/home/teleop/project/teleop/build/robotiq_arg85_description': CONDA_PROMPT_MODIFIER=(teleop) /home/teleop/miniforge3/envs/teleop/bin/cmake /home/teleop/project/teleop/robotiq_arg85_description -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/teleop/miniforge3/envs/teleop
+[0.032s] [0mCMake Deprecation Warning at CMakeLists.txt:1 (cmake_minimum_required):
+[0.032s]   Compatibility with CMake < 2.8.12 will be removed from a future version of
+[0.033s]   CMake.
+[0.033s] 
+[0.033s]   Update the VERSION argument <min> value or use a ...<max> suffix to tell
+[0.033s]   CMake that the project does not need compatibility with older versions.
+[0.033s] 
+[0.033s] [0m
+[0.130s] -- The C compiler identification is GNU 13.3.0
+[0.272s] -- The CXX compiler identification is GNU 13.3.0
+[0.288s] -- Detecting C compiler ABI info
+[0.380s] -- Detecting C compiler ABI info - done
+[0.404s] -- Check for working C compiler: /home/teleop/miniforge3/envs/teleop/bin/x86_64-conda-linux-gnu-cc - skipped
+[0.405s] -- Detecting C compile features
+[0.405s] -- Detecting C compile features - done
+[0.410s] -- Detecting CXX compiler ABI info
+[0.527s] -- Detecting CXX compiler ABI info - done
+[0.544s] -- Check for working CXX compiler: /home/teleop/miniforge3/envs/teleop/bin/x86_64-conda-linux-gnu-c++ - skipped
+[0.544s] -- Detecting CXX compile features
+[0.545s] -- Detecting CXX compile features - done
+[0.566s] -- Configuring incomplete, errors occurred!
+[0.566s] See also "/home/teleop/project/teleop/build/robotiq_arg85_description/CMakeFiles/CMakeOutput.log".
+[0.566s] [31mCMake Error at CMakeLists.txt:5 (find_package):
+[0.567s]   By not providing "Findcatkin.cmake" in CMAKE_MODULE_PATH this project has
+[0.567s]   asked CMake to find a package configuration file provided by "catkin", but
+[0.567s]   CMake did not find one.
+[0.567s] 
+[0.567s]   Could not find a package configuration file provided by "catkin" with any
+[0.567s]   of the following names:
+[0.567s] 
+[0.567s]     catkinConfig.cmake
+[0.567s]     catkin-config.cmake
+[0.567s] 
+[0.568s]   Add the installation prefix of "catkin" to CMAKE_PREFIX_PATH or set
+[0.568s]   "catkin_DIR" to a directory containing one of the above files.  If "catkin"
+[0.568s]   provides a separate development package or SDK, be sure it has been
+[0.568s]   installed.
+[0.568s] 
+[0.568s] [0m
+[0.569s] Invoked command in '/home/teleop/project/teleop/build/robotiq_arg85_description' returned '1': CONDA_PROMPT_MODIFIER=(teleop) /home/teleop/miniforge3/envs/teleop/bin/cmake /home/teleop/project/teleop/robotiq_arg85_description -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/teleop/miniforge3/envs/teleop

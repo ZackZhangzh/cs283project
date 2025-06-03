@@ -1,0 +1,181 @@
+[0.176s] [34mcolcon[0m [1;30mDEBUG[0m [32mCommand line arguments: ['/home/teleop/miniforge3/envs/teleop/bin/colcon', 'build', '--merge-install', '--install-base', '/home/teleop/miniforge3/envs/teleop'][0m
+[0.176s] [34mcolcon[0m [1;30mDEBUG[0m [32mParsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='/home/teleop/miniforge3/envs/teleop', merge_install=True, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=8, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=None, packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f6d8a2885b0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f6d8a2880d0>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f6d8a2880d0>>)[0m
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(colcon_meta) check parameters
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(recursive) check parameters
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(ignore) check parameters
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(path) check parameters
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(colcon_meta) discover
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(recursive) discover
+[0.340s] [34mcolcon.colcon_core.package_discovery[0m [1;30mINFO[0m Crawling recursively for packages in '/home/teleop/project/teleop'
+[0.340s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.340s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'ignore'
+[0.340s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'ignore_ament_install'
+[0.340s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['colcon_pkg']
+[0.340s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'colcon_pkg'
+[0.340s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['colcon_meta']
+[0.341s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'colcon_meta'
+[0.341s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['ros']
+[0.341s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'ros'
+[0.379s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['cmake', 'python']
+[0.379s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'cmake'
+[0.379s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'python'
+[0.379s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['python_setup_py']
+[0.379s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'python_setup_py'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'ignore'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'ignore_ament_install'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extensions ['colcon_pkg']
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'colcon_pkg'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extensions ['colcon_meta']
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'colcon_meta'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extensions ['ros']
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'ros'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extensions ['cmake', 'python']
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'cmake'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'python'
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extensions ['python_setup_py']
+[0.380s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(__pycache__) by extension 'python_setup_py'
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(build) by extension 'ignore'
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(build) ignored
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extensions ['ignore', 'ignore_ament_install']
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extension 'ignore'
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extension 'ignore_ament_install'
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extensions ['colcon_pkg']
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extension 'colcon_pkg'
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extensions ['colcon_meta']
+[0.381s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extension 'colcon_meta'
+[0.382s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extensions ['ros']
+[0.382s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(franka_description) by extension 'ros'
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mDEBUG[0m [32mPackage 'franka_description' with type 'ros.catkin' and name 'franka_description'[0m
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(log) by extension 'ignore'
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(log) ignored
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extensions ['ignore', 'ignore_ament_install']
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'ignore'
+[0.392s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'ignore_ament_install'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extensions ['colcon_pkg']
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'colcon_pkg'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extensions ['colcon_meta']
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'colcon_meta'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extensions ['ros']
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'ros'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extensions ['cmake', 'python']
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'cmake'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'python'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extensions ['python_setup_py']
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env) by extension 'python_setup_py'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extensions ['ignore', 'ignore_ament_install']
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'ignore'
+[0.393s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'ignore_ament_install'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extensions ['colcon_pkg']
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'colcon_pkg'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extensions ['colcon_meta']
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'colcon_meta'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extensions ['ros']
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'ros'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extensions ['cmake', 'python']
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'cmake'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'python'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extensions ['python_setup_py']
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(my_env/__pycache__) by extension 'python_setup_py'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extensions ['ignore', 'ignore_ament_install']
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extension 'ignore'
+[0.394s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extension 'ignore_ament_install'
+[0.395s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extensions ['colcon_pkg']
+[0.395s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extension 'colcon_pkg'
+[0.395s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extensions ['colcon_meta']
+[0.395s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extension 'colcon_meta'
+[0.395s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extensions ['ros']
+[0.395s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(robotiq_arg85_description) by extension 'ros'
+[0.396s] [34mcolcon.colcon_core.package_identification[0m [1;30mDEBUG[0m [32mPackage 'robotiq_arg85_description' with type 'ros.catkin' and name 'robotiq_arg85_description'[0m
+[0.396s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(recursive) using defaults
+[0.396s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(ignore) discover
+[0.396s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(ignore) using defaults
+[0.396s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(path) discover
+[0.396s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(path) using defaults
+[0.415s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'cmake_args' from command line to 'None'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'cmake_target' from command line to 'None'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'franka_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mDEBUG[0m [32mBuilding package 'franka_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/teleop/project/teleop/build/franka_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/teleop/miniforge3/envs/teleop', 'merge_install': True, 'path': '/home/teleop/project/teleop/franka_description', 'symlink_install': False, 'test_result_base': None}[0m
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'cmake_args' from command line to 'None'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'cmake_target' from command line to 'None'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'cmake_clean_cache' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'cmake_clean_first' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'cmake_force_configure' from command line to 'False'
+[0.416s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'ament_cmake_args' from command line to 'None'
+[0.417s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'catkin_cmake_args' from command line to 'None'
+[0.417s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'robotiq_arg85_description' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.417s] [34mcolcon.colcon_core.verb[0m [1;30mDEBUG[0m [32mBuilding package 'robotiq_arg85_description' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/teleop/project/teleop/build/robotiq_arg85_description', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/teleop/miniforge3/envs/teleop', 'merge_install': True, 'path': '/home/teleop/project/teleop/robotiq_arg85_description', 'symlink_install': False, 'test_result_base': None}[0m
+[0.417s] [34mcolcon.colcon_core.executor[0m [1;30mINFO[0m Executing jobs using 'parallel' executor
+[0.418s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mrun_until_complete[0m
+[0.418s] [34mcolcon.colcon_ros.task.catkin.build[0m [1;30mINFO[0m Building ROS package in '/home/teleop/project/teleop/franka_description' with build type 'catkin'
+[0.418s] [34mcolcon.colcon_cmake.task.cmake.build[0m [1;30mINFO[0m Building CMake package in '/home/teleop/project/teleop/franka_description'
+[0.420s] [34mcolcon.colcon_core.plugin_system[0m [1;30mINFO[0m Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.420s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.421s] [34mcolcon.colcon_core.shell[0m [1;30mDEBUG[0m [32mSkip shell extension 'dsv' for command environment[0m
+[0.425s] [34mcolcon.colcon_ros.task.catkin.build[0m [1;30mINFO[0m Building ROS package in '/home/teleop/project/teleop/robotiq_arg85_description' with build type 'catkin'
+[0.425s] [34mcolcon.colcon_cmake.task.cmake.build[0m [1;30mINFO[0m Building CMake package in '/home/teleop/project/teleop/robotiq_arg85_description'
+[0.426s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.426s] [34mcolcon.colcon_core.shell[0m [1;30mDEBUG[0m [32mSkip shell extension 'dsv' for command environment[0m
+[0.437s] [34mcolcon.colcon_core.event_handler.log_command[0m [1;30mDEBUG[0m [32mInvoking command in '/home/teleop/project/teleop/build/franka_description': CONDA_PROMPT_MODIFIER=(teleop) /home/teleop/miniforge3/envs/teleop/bin/cmake /home/teleop/project/teleop/franka_description -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/teleop/miniforge3/envs/teleop[0m
+[0.445s] [34mcolcon.colcon_core.event_handler.log_command[0m [1;30mDEBUG[0m [32mInvoking command in '/home/teleop/project/teleop/build/robotiq_arg85_description': CONDA_PROMPT_MODIFIER=(teleop) /home/teleop/miniforge3/envs/teleop/bin/cmake /home/teleop/project/teleop/robotiq_arg85_description -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/teleop/miniforge3/envs/teleop[0m
+[0.995s] [34mcolcon.colcon_core.event_handler.log_command[0m [1;30mDEBUG[0m [32mInvoked command in '/home/teleop/project/teleop/build/robotiq_arg85_description' returned '1': CONDA_PROMPT_MODIFIER=(teleop) /home/teleop/miniforge3/envs/teleop/bin/cmake /home/teleop/project/teleop/robotiq_arg85_description -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/teleop/miniforge3/envs/teleop[0m
+[0.999s] [34mcolcon.colcon_core.event_handler.log_command[0m [1;30mDEBUG[0m [32mInvoked command in '/home/teleop/project/teleop/build/franka_description' returned '1': CONDA_PROMPT_MODIFIER=(teleop) /home/teleop/miniforge3/envs/teleop/bin/cmake /home/teleop/project/teleop/franka_description -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/home/teleop/miniforge3/envs/teleop[0m
+[1.007s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m create_environment_scripts_only(robotiq_arg85_description)
+[1.011s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop' for CMake module files
+[1.011s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop' for CMake config files
+[1.012s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('robotiq_arg85_description', 'cmake_prefix_path')
+[1.012s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/cmake_prefix_path.ps1'
+[1.013s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/cmake_prefix_path.dsv'
+[1.014s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/cmake_prefix_path.sh'
+[1.015s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop/libexec'
+[1.016s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop/lib'
+[1.019s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('robotiq_arg85_description', 'ld_library_path_lib')
+[1.019s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/ld_library_path_lib.ps1'
+[1.020s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/ld_library_path_lib.dsv'
+[1.020s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/ld_library_path_lib.sh'
+[1.021s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop/bin'
+[1.021s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('robotiq_arg85_description', 'path')
+[1.022s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/path.ps1'
+[1.022s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/path.dsv'
+[1.023s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/path.sh'
+[1.023s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop/lib/pkgconfig/robotiq_arg85_description.pc'
+[1.025s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop/lib/python3.10/site-packages'
+[1.025s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('robotiq_arg85_description', 'pythonpath')
+[1.026s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/pythonpath.ps1'
+[1.026s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/pythonpath.dsv'
+[1.027s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/pythonpath.sh'
+[1.027s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/teleop/miniforge3/envs/teleop/bin'
+[1.028s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('robotiq_arg85_description', 'pythonscriptspath')
+[1.029s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/pythonscriptspath.ps1'
+[1.029s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/pythonscriptspath.dsv'
+[1.030s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/hook/pythonscriptspath.sh'
+[1.031s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/package.ps1'
+[1.032s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package descriptor '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/package.dsv'
+[1.033s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/package.sh'
+[1.034s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/package.bash'
+[1.035s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/teleop/miniforge3/envs/teleop/share/robotiq_arg85_description/package.zsh'
+[1.036s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m create_file_with_runtime_dependencies(/home/teleop/miniforge3/envs/teleop/share/colcon-core/packages/robotiq_arg85_description)
+[1.048s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mclosing loop[0m
+[1.048s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mloop closed[0m
+[1.048s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mrun_until_complete finished with '1'[0m
+[1.049s] [34mcolcon.colcon_core.event_reactor[0m [1;30mDEBUG[0m [32mjoining thread[0m
+[1.049s] [34mcolcon.colcon_core.event_reactor[0m [1;30mDEBUG[0m [32mjoined thread[0m
+[1.050s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/teleop/miniforge3/envs/teleop/local_setup.ps1'
+[1.053s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix util module '/home/teleop/miniforge3/envs/teleop/_local_setup_util_ps1.py'
+[1.057s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/teleop/miniforge3/envs/teleop/setup.ps1'
+[1.060s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/teleop/miniforge3/envs/teleop/local_setup.sh'
+[1.062s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix util module '/home/teleop/miniforge3/envs/teleop/_local_setup_util_sh.py'
+[1.064s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/teleop/miniforge3/envs/teleop/setup.sh'
+[1.067s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/teleop/miniforge3/envs/teleop/local_setup.bash'
+[1.068s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/teleop/miniforge3/envs/teleop/setup.bash'
+[1.071s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/teleop/miniforge3/envs/teleop/local_setup.zsh'
+[1.073s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/teleop/miniforge3/envs/teleop/setup.zsh'
